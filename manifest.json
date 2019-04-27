@@ -1,0 +1,64 @@
+{
+  "name": "Root",
+  "category": "PROJECT_ROOT",
+  "description": "NodeJs / Mongo project",
+  "access": 1,
+  "attributes": [
+    {
+      "name": "name",
+      "label": "Application Name",
+      "description": "The name of your application",
+      "access": 3,
+      "order": 1,
+      "type": "string",
+      "value": "MyNodeJsMongoApplication"
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "description": "A description of your application",
+      "type": "string",
+      "access": 3,
+      "order": 4,
+      "value": "Bob's NodeJs / Mongo backend"
+    },
+    {
+      "name": "version",
+      "label": "Version",
+      "description": "The version you want to start at",
+      "type": "string",
+      "access": 3,
+      "order": 5,
+      "value": "0.0.1"
+    },
+    {
+      "name": "author",
+      "label": "Author",
+      "description": "Your name",
+      "type": "string",
+      "access": 3,
+      "order": 6,
+      "value": "Bob"
+    }
+  ],
+  "relations": [
+    {
+      "name": "features",
+      "label": "Application features",
+      "description": "Your NodeJs Application features",
+      "preferredRender": "ACCORDION",
+      "access": 1,
+      "children":[
+        {
+          "source":{
+            "name":"domain",
+            "author":"codemancy"
+          },
+          "name": "domain",
+          "description": "The Domain of your Application",
+          "access": 1
+        }
+      ]
+    }
+  ]
+}

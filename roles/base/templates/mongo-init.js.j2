@@ -1,0 +1,14 @@
+db.auth('root', 'example')
+
+db = db.getSiblingDB('{{ appName }}')
+
+db.createUser({
+  user: '{{ author }}',
+  pwd: 'password',
+  roles: [
+    {
+      role: 'root',
+      db: 'admin',
+    },
+  ],
+});

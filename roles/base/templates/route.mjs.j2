@@ -1,0 +1,13 @@
+import * as controller from './{{ entity.name|lower }}.controller.mjs';
+import passport from 'passport';
+
+export default (app) => {
+
+    app.post('/{{ entity.name|lower }}', {% if hasSecurity %} passport.authenticate('jwt', { session: false }), {% endif %} controller.create);
+
+    app.get('/{{ entity.name|lower }}', {% if hasSecurity %}passport.authenticate('jwt', {session: false}), {% endif %} controller.findAll);
+
+    app.put('/{{ entity.name|lower }}/:id', {% if hasSecurity %} passport.authenticate('jwt', {session: false}), {% endif %} controller.update);
+
+    app.delete('/{{ entity.name|lower }}/:id', {% if hasSecurity %} passport.authenticate('jwt', {session: false}), {% endif %} controller.deleteById);
+}

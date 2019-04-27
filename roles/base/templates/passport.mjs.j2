@@ -1,0 +1,24 @@
+import passport from 'passport';
+import passportBasic from 'passport-http';
+import passportJWT from 'passport-jwt';
+import bcrypt from 'bcrypt';
+
+import { {{ authEntity.name }} } from './rest/{{ authEntity.name | lower }}/{{ authEntity.name | lower }}.model';
+import * as config from './config.mjs';
+
+passport.use(new passportBasic.BasicStrategy((username, password, cb) =>
+    {{ authEntity.name }}.findOne({ username }).then(item => {
+        if (!item || !bcrypt.compareSync(password, item.password)) {
+            return cb(null, false, { message: 'Incorrect email or password' });
+        }
+        return cb(null, item, { message: 'Successful login' });
+    }).catch(err => cb(err))
+));
+
+passport.use(new passportJWT.Strategy({
+    jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config.secret
+}, (jwt, cb) => {{ authEntity.name }}.findOne({ _id: jwt._id })
+    .then(item => cb(null, item))
+    .catch(err => cb(err))
+));
