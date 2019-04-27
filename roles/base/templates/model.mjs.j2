@@ -6,7 +6,7 @@ const {{ entity.name }}Schema = mongoose.Schema({
 {%- set optional = (field.attributes|selectattr("name","equalto","fk")|first).value -%}
 {%- if field.attributes|selectattr("name","equalto","fk")|selectattr("value","equalto","ManyToOne")|list|length > 0 -%}
 {%- set fkField = (field.attributes|selectattr("name","equalto","type")|first).value -%}
-    {{ field.name|lower }}: { type: Schema.Types.ObjectId, ref: '{{ fkField }}' }
+    {{ field.name|lower }}: { type: mongoose.Schema.Types.ObjectId, ref: '{{ fkField }}' }
 {%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Date")|list|length > 0 -%}
     {{ field.name|lower }}: { type: Date {% if not optional %}, required: true {%- endif -%}}
 {%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","String")|list|length > 0 -%}
