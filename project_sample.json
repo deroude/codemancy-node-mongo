@@ -855,7 +855,7 @@
             "label": "Description",
             "description": "A description of your application",
             "order": 4,
-            "value": "Bob's Spring Boot MySQL blog",
+            "value": "Bob's NodeJs / Mongo blog",
             "type": "string",
             "access": 3
         }

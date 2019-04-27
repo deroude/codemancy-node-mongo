@@ -3,35 +3,29 @@ import mongoose from 'mongoose';
 const {{ entity.name }}Schema = mongoose.Schema({
 
 {% for field in fields %}
-{% set optional = (field.attributes|selectattr("name","equalto","fk")|first).value %}
-
-{% if field.attributes|selectattr("name","equalto","fk")|selectattr("value","equalto","ManyToOne")|list|length > 0 %}
-{% set fkField = (field.attributes|selectattr("name","equalto","type")|first).value %}
+{%- set optional = (field.attributes|selectattr("name","equalto","fk")|first).value -%}
+{%- if field.attributes|selectattr("name","equalto","fk")|selectattr("value","equalto","ManyToOne")|list|length > 0 -%}
+{%- set fkField = (field.attributes|selectattr("name","equalto","type")|first).value -%}
     {{ field.name|lower }}: { type: Schema.Types.ObjectId, ref: '{{ fkField }}' }
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Date")|list|length > 0 %}
-    {{ field.name|lower }}: { type: Date {% if !optional %}, required: true {% endif %}}
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","String")|list|length > 0 %}
-    {{ field.name|lower }}: { type: String {% if !optional %}, required: true {% endif %}}
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Integer")|list|length > 0 %}
-    {{ field.name|lower }}: { type: Number {% if !optional %}, required: true {% endif %}}
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Double")|list|length > 0 %}
-    {{ field.name|lower }}: { type: Number {% if !optional %}, required: true {% endif %}}
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Long")|list|length > 0 %}
-    {{ field.name|lower }}: { type: Number {% if !optional %}, required: true {% endif %}}
-
-{% elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","enumeration")|list|length > 0 %}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Date")|list|length > 0 -%}
+    {{ field.name|lower }}: { type: Date {% if not optional %}, required: true {%- endif -%}}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","String")|list|length > 0 -%}
+    {{ field.name|lower }}: { type: String {% if not optional %}, required: true {%- endif -%}}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Integer")|list|length > 0 -%}
+    {{ field.name|lower }}: { type: Number {% if not optional %}, required: true {%- endif -%}}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Double")|list|length > 0 -%}
+    {{ field.name|lower }}: { type: Number {% if not optional %}, required: true {%- endif -%}}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","Long")|list|length > 0 -%}
+    {{ field.name|lower }}: { type: Number {% if not optional %}, required: true {%- endif -%}}
+{%- elif field.attributes|selectattr("name","equalto","type")|selectattr("value","equalto","enumeration")|list|length > 0 -%}
     {{ field.name|lower }}: { type: String, enum: [
         {%- for pv in (field.attributes|selectattr("name","equalto","enum")|first).possibleValues|list -%}'{{pv}}'
         {%- if not loop.last -%},{%- endif -%}
         {%- endfor -%}]
-        {%- if !optional -%}, required: true {%- endif -%}}
-{%- endif %}
-{% if not loop.last %},{% endif %}
+        {%- if not optional -%}, required: true {%- endif -%}}
+{%- endif -%}
+{%- if not loop.last -%},{%- endif %}
+
 {% endfor %}
 }, {
         timestamps: true
