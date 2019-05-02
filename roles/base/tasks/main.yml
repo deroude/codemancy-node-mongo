@@ -1,37 +1,37 @@
 - name: copy static files
   copy:
       src: "{{role_path}}/files/"
-      dest: /target
+      dest: "{{ targetDir }}"
 - name: create package.json
   template:
     src: package.json.j2
-    dest: "/target/package.json"
+    dest: "{{ targetDir }}/package.json"
 - name: create mongo initialization script
   template: 
     src: mongo-init.js.j2
-    dest: "/target/mongo-init.js"
+    dest: "{{ targetDir }}/mongo-init.js"
 - name: create app entry point
   template:
     src: index.mjs.j2
-    dest: "/target/index.mjs"
+    dest: "{{ targetDir }}/index.mjs"
 - name: create app config
   template:
     src: config.mjs.j2
-    dest: "/target/config.mjs"
+    dest: "{{ targetDir }}/config.mjs"
 - name: create passport config
   when: hasSecurity
   template:
     src: passport.mjs.j2
-    dest: "/target/passport.mjs"
+    dest: "{{ targetDir }}/passport.mjs"
 - name: create login endpoint
   when: hasSecurity
   template:
     src: auth.mjs.j2
-    dest: "/target/auth.mjs"
+    dest: "{{ targetDir }}/auth.mjs"
 - name: create directory structure for each entity
   loop: "{{ entities }}"
   file: 
-    path: "/target/rest/{{ item.name|lower }}"
+    path: "{{ targetDir }}/rest/{{ item.name|lower }}"
     state: directory
 - name: create mongoose model for each entity
   loop: "{{ entities }}"
@@ -40,18 +40,18 @@
     fields: "{{ (entity.relations|selectattr('name','equalto','fields')|first).children|list }}"
   template: 
     src: "model.mjs.j2"
-    dest: "/target/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.model.mjs"
+    dest: "{{ targetDir }}/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.model.mjs"
 - name: create rest controller for each entity
   loop: "{{ entities }}"
   vars:
     entity: "{{ item }}"
   template: 
     src: "controller.mjs.j2"
-    dest: "/target/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.controller.mjs"
+    dest: "{{ targetDir }}/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.controller.mjs"
 - name: create express route for each entity
   loop: "{{ entities }}"
   vars:
     entity: "{{ item }}"
   template: 
     src: "route.mjs.j2"
-    dest: "/target/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.route.mjs"
+    dest: "{{ targetDir }}/rest/{{ entity.name|lower }}/{{ entity.name|lower }}.route.mjs"
